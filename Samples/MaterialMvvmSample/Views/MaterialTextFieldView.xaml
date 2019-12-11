@@ -21,6 +21,21 @@
             <material:MaterialTextField Placeholder="With Icon"
                                         LeadingIcon="icon_plus"/>
 
+            <material:MaterialTextField Placeholder="Disabled (opacity set to 0.33 by default)"
+                                        IsEnabled="False" />
+
+            <material:MaterialTextField Placeholder="Disabled (opacity remained at 1)"
+                                        ChangeOpacityWhenDisabled="False"
+                                        IsEnabled="False" />
+
+            <material:MaterialTextField Placeholder="Disabled (opacity remained at 1)"                                        
+                                        IsEnabled="False"
+                                        ChangeOpacityWhenDisabled="False" />
+
+            <material:MaterialTextField Placeholder="Disabled (opacity set to 0.33 by property)"                                        
+                                        IsEnabled="False"
+                                        ChangeOpacityWhenDisabled="True" />
+
             <material:MaterialTextField Placeholder="Choices"
                                         InputType="Choice"
                                         Choices="{Binding Choices}"/>

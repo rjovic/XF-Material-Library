@@ -22,6 +22,8 @@ namespace XF.Material.Forms.UI
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MaterialTextField : ContentView, IMaterialElementConfiguration
     {
+        public static readonly BindableProperty ChangeOpacityWhenDisabledProperty = BindableProperty.Create(nameof(ChangeOpacityWhenDisabled), typeof(bool), typeof(MaterialTextField), true);
+        
         public static readonly BindableProperty AlwaysShowUnderlineProperty = BindableProperty.Create(nameof(AlwaysShowUnderline), typeof(bool), typeof(MaterialTextField), false);
 
         public static new readonly BindableProperty BackgroundColorProperty = BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(MaterialTextField), Color.FromHex("#DCDCDC"));
@@ -175,6 +177,15 @@ namespace XF.Material.Forms.UI
         /// Raised when the user finalizes the input on this text field using the return key.
         /// </summary>
         public event EventHandler Completed;
+
+        /// <summary>
+        /// Gets or sets whether the opacity will be changed or not when text field is disabled
+        /// </summary>
+        public bool ChangeOpacityWhenDisabled
+        {
+            get => (bool)GetValue(ChangeOpacityWhenDisabledProperty);
+            set => SetValue(ChangeOpacityWhenDisabledProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets whether the underline accent of this text field should always show or not.
@@ -1027,6 +1038,16 @@ namespace XF.Material.Forms.UI
             return Choices[index];
         }
 
+        private void ChangeOpacity(double value)
+        {
+            Opacity = value;
+        }
+
+        private void OnChangeOpacityWhenDisabledChanged(bool useOpacity)
+        {
+            if (!IsEnabled && useOpacity) ChangeOpacity(0.33);
+        }
+
         private void OnAlwaysShowUnderlineChanged(bool isShown)
         {
             persistentUnderline.IsVisible = isShown;
@@ -1045,7 +1066,7 @@ namespace XF.Material.Forms.UI
 
         private void OnEnabledChanged(bool isEnabled)
         {
-            Opacity = isEnabled ? 1 : 0.33;
+            if (!isEnabled && ChangeOpacityWhenDisabled) ChangeOpacity(0.33);
             helper.IsVisible = isEnabled && !string.IsNullOrEmpty(HelperText);
         }
 
@@ -1360,6 +1381,7 @@ namespace XF.Material.Forms.UI
                 { nameof(IsEnabled), () => OnEnabledChanged(IsEnabled) },
                 { nameof(BackgroundColor), () => OnBackgroundColorChanged(BackgroundColor) },
                 { nameof(AlwaysShowUnderline), () => OnAlwaysShowUnderlineChanged(AlwaysShowUnderline) },
+                { nameof(ChangeOpacityWhenDisabled), () => OnChangeOpacityWhenDisabledChanged(ChangeOpacityWhenDisabled) },
                 { nameof(MaxLength), () => OnMaxLengthChanged(MaxLength, IsMaxLengthCounterVisible) },
                 { nameof(ReturnCommand), () => OnReturnCommandChanged(ReturnCommand) },
                 { nameof(ReturnCommandParameter), () => OnReturnCommandParameterChanged(ReturnCommandParameter) },
