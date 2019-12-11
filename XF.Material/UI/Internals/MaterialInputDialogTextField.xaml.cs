@@ -535,14 +535,14 @@ namespace XF.Material.Forms.UI.Internals
             }
         }
 
-        private void ChangeOpacity(double value)
+        private void ChangeOpacity()
         {
-            Opacity = value;
+            Opacity = !IsEnabled && ChangeOpacityWhenDisabled ? 0.33 : 1;
         }
 
         private void OnChangeOpacityWhenDisabledChanged(bool useOpacity)
         {
-            if (!IsEnabled && useOpacity) ChangeOpacity(0.33);
+            ChangeOpacity();
         }
 
         private void OnAlwaysShowUnderlineChanged(bool isShown)
@@ -558,7 +558,7 @@ namespace XF.Material.Forms.UI.Internals
 
         private void OnEnabledChanged(bool isEnabled)
         {
-            if (!isEnabled && ChangeOpacityWhenDisabled) ChangeOpacity(0.33);
+            ChangeOpacity();
             helper.IsVisible = isEnabled && !string.IsNullOrEmpty(HelperText);
         }
 
